@@ -1,30 +1,48 @@
 import Booklist from "@/components/books/Booklist";
-import fs from "fs";
-import path from "path";
 import Booksearch from "@/components/books/Booksearch";
+import { useState, useContext } from "react";
+import AuthContext from "@/store/auth-context";
 
+export default function Allbooks(props) {
+    const [filteredBooks, setFilteredBooks] = useState(props.books); // State for filtered books
+    const [searchTerm, setSearchTerm] = useState(""); // State for search term
+    const authCtx = useContext(AuthContext);
 
-export default function Allbooks(props){
+    const filterBooks = (searchValue) => {
+        const lowerCaseSearch = searchValue.toLowerCase();
+        const newFilteredBooks = props.books.filter((book) =>
+            book.title.toLowerCase().includes(lowerCaseSearch)
+        );
+        setFilteredBooks(newFilteredBooks);
+    };
+
+    const handleSearchChange = (event) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+        filterBooks(value);
+    };
+
     return (
         <>
             <h1>All Books</h1>
-            <Booksearch />
-            <Booklist books={props.books}/>
+            <Booksearch
+                onSearchChange={handleSearchChange}
+                searchTerm={searchTerm}
+                user={authCtx.user} // Pass user to Booksearch
+            />
+            <Booklist books={filteredBooks} />
         </>
-    )
+    );
 }
 
-export async function getStaticProps(){
-    const filePath = path.join(process.cwd(), "data", "Data.json");
-    const jsonData = fs.readFileSync(filePath, "utf-8");
-    const data = JSON.parse(jsonData);
+export async function getStaticProps() {
     const res = await fetch("http://localhost:3000/api/books/getAllBooks");
     const books = await res.json();
 
     return {
         props: {
-            books: books
+            books: books,
         },
-        revalidate: 60
-    }
+        revalidate: 60,
+    };
 }

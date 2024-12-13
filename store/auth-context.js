@@ -1,10 +1,6 @@
 import { createContext, useState } from 'react';
 
-const AuthContext = createContext({
-    user: null,
-    login: function(user) {},
-    logout: function() {}
-});
+const AuthContext = createContext();
 
 export function AuthContextProvider(props) {
     const [authenticatedUser, setAuthenticatedUser] = useState(null);

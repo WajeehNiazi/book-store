@@ -31,12 +31,18 @@ export default function FilteredBooksPage() {
         }
 
         console.log("Converted genre ID:", genre);
-
         // Filter books by genre ID
-        const books = data.books.filter(book => book.genreId === genre);
-        console.log("Filtered books:", books);
+        const getBookByGenre = async () => {
+            try {
+                const res = await fetch(`http://localhost:3000/api/genres/${genre}/books`);
+                const books = await res.json();
+                setFilteredBooks(books);
+            } catch (error) {
+                console.error(error);
+            }
+        };
 
-        setFilteredBooks(books);
+        getBookByGenre();
         setIsLoading(false);
     }, [filterData]);
 

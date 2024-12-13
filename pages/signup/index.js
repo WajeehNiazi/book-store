@@ -1,10 +1,18 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import AuthContext from "@/store/auth-context";
 
 const SignupPage = () => {
+    const { user } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const router = useRouter();
+
+    if (user) {
+        router.push("/");
+        return null;
+    }
 
     const onSubmit = async (event) => {
         event.preventDefault();

@@ -11,7 +11,7 @@ export default function MainHeader() {
     const logoutHandler = () => {
         logout();
         router.push("/");
-    }
+    };
 
     const addBooksHandler = async () => {
         const response = await fetch("/api/temp/book", {
@@ -23,7 +23,7 @@ export default function MainHeader() {
 
         const data = await response.json();
         console.log(data);
-    }
+    };
 
     return (
         <header className={styles.header}>
@@ -35,31 +35,41 @@ export default function MainHeader() {
                     {!user && (
                         <>
                             <li>
-                                <Link href="/login">Login</Link>
+                                <Link href="/login">
+                                    <button className={styles.navButton}>Login</button>
+                                </Link>
                             </li>
                             <li>
-                                <Link href="/signup">Signup</Link>
+                                <Link href="/signup">
+                                    <button className={styles.navButton}>Signup</button>
+                                </Link>
                             </li>
                         </>
                     )}
                     <li>
-                        <Link href="/books">View All Books</Link>
+                        <Link href="/books">
+                            <button className={styles.navButton}>View All Books</button>
+                        </Link>
                     </li>
                     <li>
-                        <Link href="/authors">View All Authors</Link>
+                        <Link href="/authors">
+                            <button className={styles.navButton}>View All Authors</button>
+                        </Link>
                     </li>
                     <li>
-                        <Link href="/info">View Information Page</Link>
+                        <Link href="/info">
+                            <button className={styles.navButton}>View Information Page</button>
+                        </Link>
                     </li>
                     {user && (
                         <>
                             <li>
-                                <button onClick={logoutHandler} className={styles.logoutButton}>
-                                    Logout
-                                </button>
-                            </li>
-                            <li>
-                                <button onClick={addBooksHandler} className={styles.logoutButton}>Add Books</button>
+                                <Link href="">
+                                    <button onClick={logoutHandler} className={styles.navButton}>
+                                        Logout
+                                    </button>
+                                </Link>
+                                
                             </li>
                         </>
                     )}

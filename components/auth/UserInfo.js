@@ -3,7 +3,7 @@ import AuthContext from "@/store/auth-context";
 
 const UserInfo = () => {
     const authCtx = useContext(AuthContext);
-
+    console.log(authCtx);
     return (
         <div>
             <h2>User Info</h2>

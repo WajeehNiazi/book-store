@@ -1,5 +1,4 @@
 import { useRouter } from "next/router"
-import data from "../../../data/Data.json"
 import { useEffect, useState } from "react";
 import Booklist from "@/components/books/Booklist";
 
@@ -10,15 +9,26 @@ export default function BooksinGenre() {
     const genreId = router.query.id;
 
     useEffect(() => {
-        const genre = data.genres.find(genre => genre.id.toString() === genreId);
-            
-            
-        if (genre) {
-            setGenreName(genre.name);
+        const fetchgenreandbooks = async () => {
+            try {
+                const genreRes = await fetch(`http://localhost:3000/api/genres`);
+                const genres = await genreRes.json();
+                const genre = genres.find(genre => genre.id === genreId);
+                setGenreName(genre.name);
+
+                const booksRes = await fetch(`http://localhost:3000/api/genres/${genreId}/books`);
+                const books = await booksRes.json();
+                setBooksInGenre(books);
+
+            } catch (error) {
+                console.error(error);
+            }
         }
 
-        const books = data.books.filter(book => book.genreId === genreId);
-        setBooksInGenre(books);
+        if (genreId) {
+            fetchgenreandbooks();
+        }
+
     }, [genreId]);
 
     if(!genreId){
